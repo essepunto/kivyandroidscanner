@@ -49,3 +49,5 @@ jobs:
       with:
         name: apk
         path: bin/*.apk
+    - name: List APK files in bin directory
+      run: ls -la bin/
