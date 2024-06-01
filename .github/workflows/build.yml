@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,15 +33,16 @@ jobs:
       - name: Set up Android SDK and NDK
         run: |
           export ANDROID_SDK_ROOT=$HOME/.android/sdk
+          export ANDROID_NDK_ROOT=$HOME/.android/ndk
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
           cd $ANDROID_SDK_ROOT/cmdline-tools
           wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O commandlinetools.zip
-          unzip commandlinetools.zip -d latest
+          unzip commandlinetools.zip -d cmdline-tools
           rm commandlinetools.zip
-          export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
-          yes | sdkmanager --licenses
-          sdkmanager --update
-          sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.1.8937393"
+          export PATH=$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin:$PATH
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager --licenses
+          $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager --update
+          $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.1.8937393"
 
       - name: Create bin directory
         run: mkdir -p bin
