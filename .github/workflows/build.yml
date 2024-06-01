@@ -31,16 +31,15 @@ jobs:
         export PATH="$HOME/.poetry/bin:$PATH"
         poetry install
 
-    - name: Set up Buildozer
+    - name: Set up Buildozer and install Cython
       run: |
         pip install buildozer
-        if [ ! -f "buildozer.spec" ]; then
-          buildozer init
-        fi
+        pip install cython  # Install Cython
 
     - name: Build APK
       run: |
         buildozer android debug
+    
 
     - name: Upload APK
       uses: actions/upload-artifact@v2
