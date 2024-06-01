@@ -36,9 +36,14 @@ jobs:
         pip install buildozer
         pip install cython  # Install Cython
 
-    - name: Build APK
+    - name: Set up Android SDK and accept licenses
       run: |
-        buildozer android debug
+        sudo apt-get install -y lib32stdc++6 lib32z1
+        export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
+        mkdir -p $ANDROID_HOME/licenses
+        echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$ANDROID_HOME/licenses/android-sdk-license"
+        echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd
+
     
 
     - name: Upload APK
