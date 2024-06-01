@@ -16,3 +16,5 @@ android.archs = arm64-v8a, armeabi-v7a  # добавлено для поддер
 logcat = true
 copy_libs = 1
 build_no = 1
+build_dir = .buildozer
+bin_dir = bin
