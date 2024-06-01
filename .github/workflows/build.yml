@@ -34,7 +34,9 @@ jobs:
     - name: Set up Buildozer
       run: |
         pip install buildozer
-        buildozer init
+        if [ ! -f "buildozer.spec" ]; then
+          buildozer init
+        fi
 
     - name: Build APK
       run: |
