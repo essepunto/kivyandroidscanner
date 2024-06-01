@@ -84,3 +84,4 @@ class BarcodeScannerApp(MDApp):
 
 if __name__ == "__main__":
     BarcodeScannerApp().run()
+#
