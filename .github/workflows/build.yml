@@ -3,7 +3,7 @@ name: Build Kivy APK
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -39,12 +39,14 @@ jobs:
     - name: Set up Android SDK
       run: |
         sudo apt-get install -y lib32stdc++6 lib32z1
+        export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
         mkdir -p $ANDROID_HOME
         cd $ANDROID_HOME
         wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
-        unzip commandlinetools-linux-7583922_latest.zip
+        unzip -q commandlinetools-linux-7583922_latest.zip -d cmdline-tools
         mkdir -p cmdline-tools/latest
-        mv cmdline-tools/* cmdline-tools/latest/
+        mv -n cmdline-tools/cmdline-tools/* cmdline-tools/latest/
+        rm -rf cmdline-tools/cmdline-tools
         export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
         yes | sdkmanager --licenses
         sdkmanager --update
