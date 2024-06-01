@@ -26,30 +26,23 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y zip unzip libncurses5 curl
-        curl -sSL https://install.python-poetry.org | python3 -
-        export PATH="$HOME/.poetry/bin:$PATH"
-        poetry install
+        sudo apt install -y python3-dev python3-pip zlib1g-dev libncurses5 libncurses5-dev libffi-dev libsqlite3-dev libssl-dev
+        pip install --upgrade pip setuptools
+        pip install cython buildozer python-for-android
 
-    - name: Set up Buildozer and install Cython
+    - name: Set up Android SDK and NDK
       run: |
-        pip install buildozer
-        pip install cython  # Install Cython
-
-    - name: Set up Android SDK
-      run: |
-        sudo apt-get install -y lib32stdc++6 lib32z1
-        mkdir -p $HOME/.android/cmdline-tools
-        cd $HOME/.android/cmdline-tools
+        export ANDROID_SDK_ROOT=$HOME/.buildozer/android/platform/android-sdk
+        export ANDROID_NDK_ROOT=$HOME/.buildozer/android/platform/android-ndk
+        mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+        cd $ANDROID_SDK_ROOT/cmdline-tools
         wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O commandlinetools.zip
-        unzip commandlinetools.zip -d cmdline-tools
+        unzip commandlinetools.zip -d latest
         rm commandlinetools.zip
-        mv cmdline-tools/cmdline-tools/* cmdline-tools/
-        export ANDROID_HOME=$HOME/.android
-        export PATH=$ANDROID_HOME/cmdline-tools/bin:$PATH
+        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
         yes | sdkmanager --licenses
         sdkmanager --update
-        sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
+        sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.1.8937393"
 
     - name: Create bin directory
       run: mkdir -p bin
