@@ -3,7 +3,7 @@ name: Build Kivy APK
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -36,7 +36,7 @@ jobs:
         pip install buildozer
         pip install cython  # Install Cython
 
-    - name: Set up Android SDK and accept licenses
+    - name: Accept Android SDK licenses
       run: |
         sudo apt-get install -y lib32stdc++6 lib32z1
         export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
@@ -44,10 +44,18 @@ jobs:
         echo -e "24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$ANDROID_HOME/licenses/android-sdk-license"
         echo -e "84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
+    - name: Create bin directory
+      run: mkdir -p bin
+
+    - name: Build APK
+      run: buildozer android debug
+
+    - name: List APK files in bin directory
+      run: ls -la bin/
+
     - name: Upload APK
       uses: actions/upload-artifact@v2
       with:
         name: apk
-        path: bin/*.apk
-    - name: List APK files in bin directory
-      run: ls -la bin/
+        path: '**/*.apk'
+        if-no-files-found: warn
